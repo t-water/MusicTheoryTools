@@ -9,49 +9,41 @@ enum Accidentals {
 export interface Note{
     Pitch: Pitches;
     Accidental: Accidentals;
-    Equivalent: Note | null;
 }
 
 const C: Note = {
     Pitch: 'C',
-    Accidental: Accidentals.None,
-    Equivalent: null
+    Accidental: Accidentals.None
 }
 
 const D: Note = {
     Pitch: 'D',
-    Accidental: Accidentals.None,
-    Equivalent: null
+    Accidental: Accidentals.None
 }
 
 const E: Note = {
     Pitch: 'E',
-    Accidental: Accidentals.None,
-    Equivalent: null
+    Accidental: Accidentals.None
 }
 
 const F: Note = {
     Pitch: 'F',
-    Accidental: Accidentals.None,
-    Equivalent: null
+    Accidental: Accidentals.None
 }
 
 const G: Note = {
     Pitch: 'G',
-    Accidental: Accidentals.None,
-    Equivalent: null
+    Accidental: Accidentals.None
 }
 
 const A: Note = {
     Pitch: 'A',
-    Accidental: Accidentals.None,
-    Equivalent: null
+    Accidental: Accidentals.None
 }
 
 const B: Note = {
     Pitch: 'B',
-    Accidental: Accidentals.None,
-    Equivalent: null
+    Accidental: Accidentals.None
 }
 
 /*
@@ -60,32 +52,27 @@ const B: Note = {
 
 const DFlat: Note = {
     Pitch: 'D',
-    Accidental: Accidentals.Flat,
-    Equivalent: CSharp
+    Accidental: Accidentals.Flat
 }
 
 const EFlat: Note = {
     Pitch: 'E',
-    Accidental: Accidentals.Flat,
-    Equivalent: DSharp
+    Accidental: Accidentals.Flat
 }
 
 const GFlat: Note = {
     Pitch: 'G',
-    Accidental: Accidentals.Flat,
-    Equivalent: FSharp
+    Accidental: Accidentals.Flat
 }
 
 const AFlat: Note = {
     Pitch: 'A',
-    Accidental: Accidentals.Flat,
-    Equivalent: GSharp
+    Accidental: Accidentals.Flat
 }
 
 const BFlat: Note = {
     Pitch: 'B',
-    Accidental: Accidentals.Flat,
-    Equivalent: ASharp
+    Accidental: Accidentals.Flat
 }
 
 /*
@@ -94,32 +81,27 @@ const BFlat: Note = {
 
 var CSharp: Note = {
     Pitch: 'C',
-    Accidental: Accidentals.Sharp,
-    Equivalent: DFlat
+    Accidental: Accidentals.Sharp
 }
 
 var DSharp: Note = {
     Pitch: 'D',
-    Accidental: Accidentals.Sharp,
-    Equivalent: EFlat
+    Accidental: Accidentals.Sharp
 }
 
 var FSharp: Note = {
     Pitch: 'F',
-    Accidental: Accidentals.Sharp,
-    Equivalent: GFlat
+    Accidental: Accidentals.Sharp
 }
 
 var GSharp: Note = {
     Pitch: 'G',
-    Accidental: Accidentals.Sharp,
-    Equivalent: AFlat
+    Accidental: Accidentals.Sharp
 }
 
 var ASharp: Note = {
     Pitch: 'A',
-    Accidental: Accidentals.Sharp,
-    Equivalent: BFlat
+    Accidental: Accidentals.Sharp
 }
 
 export const Notes = { A, B, C, D, E, F, G, AFlat, BFlat, DFlat, EFlat, GFlat, ASharp, CSharp, DSharp, FSharp, GSharp }
