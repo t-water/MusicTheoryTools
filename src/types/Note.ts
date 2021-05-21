@@ -1,107 +1,149 @@
-type Pitches = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
-
-enum Accidentals {
-    Sharp = '♯',
-    Flat = '♭',
-    None = ''
-}
-
 export interface Note{
-    Pitch: Pitches;
-    Accidental: Accidentals;
+    Name: string;
+    Abbreviation: string;
+    FlatName: string;
+    FlatAbbreviation: string;
+    SharpName: string;
+    SharpAbbreviation: string;
+    DistanceFromC: number;
+    IsAccidental: boolean;
 }
 
 const C: Note = {
-    Pitch: 'C',
-    Accidental: Accidentals.None
+    Name: 'C',
+    Abbreviation: 'C',
+    FlatName: 'D Flat Flat',
+    FlatAbbreviation: 'D♭♭',
+    SharpName: 'B Sharp',
+    SharpAbbreviation: 'B♯',
+    DistanceFromC: 0,
+    IsAccidental: false
 }
 
 const D: Note = {
-    Pitch: 'D',
-    Accidental: Accidentals.None
+    Name: 'D',
+    Abbreviation: 'D',
+    FlatName: 'E Flat Flat',
+    FlatAbbreviation: 'E♭♭',
+    SharpName: 'C Sharp Sharp',
+    SharpAbbreviation: 'C♯♯',
+    DistanceFromC: 2,
+    IsAccidental: false
 }
 
 const E: Note = {
-    Pitch: 'E',
-    Accidental: Accidentals.None
+    Name: 'E',
+    Abbreviation: 'E',
+    FlatName: 'F Flat',
+    FlatAbbreviation: 'F♭',
+    SharpName: 'D Sharp Sharp',
+    SharpAbbreviation: 'D♯♯',
+    DistanceFromC: 4,
+    IsAccidental: false
 }
 
 const F: Note = {
-    Pitch: 'F',
-    Accidental: Accidentals.None
+    Name: 'F',
+    Abbreviation: 'F',
+    FlatName: 'G Flat Flat',
+    FlatAbbreviation: 'G♭♭',
+    SharpName: 'E Sharp',
+    SharpAbbreviation: 'E♯',
+    DistanceFromC: 5,
+    IsAccidental: false
 }
 
 const G: Note = {
-    Pitch: 'G',
-    Accidental: Accidentals.None
+    Name: 'G',
+    Abbreviation: 'G',
+    FlatName: 'A Flat Flat',
+    FlatAbbreviation: 'A♭♭',
+    SharpName: 'F Sharp Sharp',
+    SharpAbbreviation: 'F♯♯',
+    DistanceFromC: 7,
+    IsAccidental: false
 }
 
 const A: Note = {
-    Pitch: 'A',
-    Accidental: Accidentals.None
+    Name: 'A',
+    Abbreviation: 'A',
+    FlatName: 'B Flat Flat',
+    FlatAbbreviation: 'B♭♭',
+    SharpName: 'G Sharp Sharp',
+    SharpAbbreviation: 'G♯♯',
+    DistanceFromC: 9,
+    IsAccidental: false
 }
 
 const B: Note = {
-    Pitch: 'B',
-    Accidental: Accidentals.None
+    Name: 'B',
+    Abbreviation: 'B',
+    FlatName: 'C Flat',
+    FlatAbbreviation: 'C♭',
+    SharpName: 'A Sharp Sharp',
+    SharpAbbreviation: 'A♯♯',
+    DistanceFromC: 11,
+    IsAccidental: false
 }
 
 /*
-    FLATS
+    ACCIDENTALS
 */
 
-const DFlat: Note = {
-    Pitch: 'D',
-    Accidental: Accidentals.Flat
+const CSharp: Note = {
+    Name: 'C Sharp / D Flat',
+    Abbreviation: 'C♯ / D♭',
+    FlatName: 'D Flat',
+    FlatAbbreviation: 'D♭',
+    SharpName: 'C Sharp',
+    SharpAbbreviation: 'C♯',
+    DistanceFromC: 1,
+    IsAccidental: true
 }
 
-const EFlat: Note = {
-    Pitch: 'E',
-    Accidental: Accidentals.Flat
+const DSharp: Note = {
+    Name: 'D Sharp / E Flat',
+    Abbreviation: 'D♯ / E♭',
+    FlatName: 'E Flat',
+    FlatAbbreviation: 'E♭',
+    SharpName: 'D Sharp',
+    SharpAbbreviation: 'D♯',
+    DistanceFromC: 3,
+    IsAccidental: true
 }
 
-const GFlat: Note = {
-    Pitch: 'G',
-    Accidental: Accidentals.Flat
+const FSharp: Note = {
+    Name: 'F Sharp / G Flat',
+    Abbreviation: 'F♯ / G♭',
+    FlatName: 'G Flat',
+    FlatAbbreviation: 'G♭',
+    SharpName: 'F Sharp',
+    SharpAbbreviation: 'F♯',
+    DistanceFromC: 6,
+    IsAccidental: true
 }
 
-const AFlat: Note = {
-    Pitch: 'A',
-    Accidental: Accidentals.Flat
+const GSharp: Note = {
+    Name: 'G Sharp / A Flat',
+    Abbreviation: 'G♯ / A♭',
+    FlatName: 'A Flat',
+    FlatAbbreviation: 'A♭',
+    SharpName: 'G Sharp',
+    SharpAbbreviation: 'G♯',
+    DistanceFromC: 8,
+    IsAccidental: true
 }
 
-const BFlat: Note = {
-    Pitch: 'B',
-    Accidental: Accidentals.Flat
+const ASharp: Note = {
+    Name: 'A Sharp / B Flat',
+    Abbreviation: 'A♯ / B♭',
+    FlatName: 'B Flat',
+    FlatAbbreviation: 'B♭',
+    SharpName: 'A Sharp',
+    SharpAbbreviation: 'A♯',
+    DistanceFromC: 10,
+    IsAccidental: true
 }
 
-/*
-    Sharps
-*/
-
-var CSharp: Note = {
-    Pitch: 'C',
-    Accidental: Accidentals.Sharp
-}
-
-var DSharp: Note = {
-    Pitch: 'D',
-    Accidental: Accidentals.Sharp
-}
-
-var FSharp: Note = {
-    Pitch: 'F',
-    Accidental: Accidentals.Sharp
-}
-
-var GSharp: Note = {
-    Pitch: 'G',
-    Accidental: Accidentals.Sharp
-}
-
-var ASharp: Note = {
-    Pitch: 'A',
-    Accidental: Accidentals.Sharp
-}
-
-export const Notes = { A, B, C, D, E, F, G, AFlat, BFlat, DFlat, EFlat, GFlat, ASharp, CSharp, DSharp, FSharp, GSharp }
+export const Notes = { A, B, C, D, E, F, G, ASharp, CSharp, DSharp, FSharp, GSharp }
+export const orderedNotes: Note[] = [A, ASharp, B, C, CSharp, D, DSharp, E, F, FSharp, G, GSharp];

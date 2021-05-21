@@ -1,4 +1,4 @@
-interface IInterval{
+export interface IInterval{
     distance: number;
     name: string;
     abbreviation: string;
