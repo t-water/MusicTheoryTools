@@ -145,5 +145,5 @@ const ASharp: Note = {
     IsAccidental: true
 }
 
-export const Notes = { A, B, C, D, E, F, G, ASharp, CSharp, DSharp, FSharp, GSharp }
-export const orderedNotes: Note[] = [A, ASharp, B, C, CSharp, D, DSharp, E, F, FSharp, G, GSharp];
+export const NotesObj = { A, B, C, D, E, F, G, ASharp, CSharp, DSharp, FSharp, GSharp };
+export const NotesArr: Note[] = Object.entries(NotesObj).map(([propName, Note]) => Note);

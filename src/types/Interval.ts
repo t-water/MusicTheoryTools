@@ -43,4 +43,5 @@ const MajorSeventh: IInterval = { distance: 11, name: 'Major Seventh', abbreviat
 
 const Octave: IInterval = { distance: 12, name: 'Octave', abbreviation: '8ve' }
 
-export const intervals: IIntervals = {MinorSecond, MajorSecond, MinorThird, MajorThird, PerfectFourth, Tritone, PerfectFifth, MinorSixth, MajorSixth, MinorSeventh, MajorSeventh, Octave}
+export const intervalObj: IIntervals = {MinorSecond, MajorSecond, MinorThird, MajorThird, PerfectFourth, Tritone, PerfectFifth, MinorSixth, MajorSixth, MinorSeventh, MajorSeventh, Octave}
+export const intervalArr: IInterval[] = Object.entries(intervalObj).map(([propName, interval]) => interval);
