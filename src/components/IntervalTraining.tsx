@@ -18,7 +18,7 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
         <button onClick = {(e: React.MouseEvent<HTMLButtonElement>) => {e.preventDefault(); setCurrentInterval(interval)}}>{interval.name}</button>
       </div>
     );
-  })
+  });
 
   return (
     <div>
