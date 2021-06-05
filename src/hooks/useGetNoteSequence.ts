@@ -2,7 +2,7 @@ import { IInterval } from "../types/Interval";
 import { Note } from "../types/Note";
 import useGetIntervalNote from "./useGetIntervalNote";
 
-export const useGetScaleNotes = () => {
+export const useGetNoteSequence = () => {
     const {getAscending} = useGetIntervalNote();
 
     return (startingNote: Note, scaleIntervals: IInterval[]): Note[] => {
