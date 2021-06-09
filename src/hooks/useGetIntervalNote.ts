@@ -15,7 +15,7 @@ const getNoteFromDistanceFromC = (distance: number): Note => {
 }
 
 const getNoteViaDistance = (startingNote: Note, distance: number): Note => {
-    const newDistance = (startingNote.DistanceFromC + distance) % SEMI_TONES_IN_AN_OCTAVE;
+    const newDistance = (startingNote.DistanceFromC + SEMI_TONES_IN_AN_OCTAVE + distance) % SEMI_TONES_IN_AN_OCTAVE;
 
     return getNoteFromDistanceFromC(newDistance);
 }
