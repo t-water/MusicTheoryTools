@@ -1,9 +1,10 @@
 import React from 'react';
-import IntervalTraining from './components/IntervalTraining';
+// import IntervalTraining from './components/IntervalTraining';
+import ScaleDegrees from './components/ScaleDegrees';
 
 function App() {
   return (
-    <IntervalTraining/>
+    <ScaleDegrees/>
   );
 }
 

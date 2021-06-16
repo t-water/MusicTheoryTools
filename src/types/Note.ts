@@ -145,5 +145,5 @@ const ASharp: Note = {
     IsAccidental: true
 }
 
-export const NotesObj = { A, B, C, D, E, F, G, ASharp, CSharp, DSharp, FSharp, GSharp };
+export const NotesObj = { C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B };
 export const NotesArr: Note[] = Object.entries(NotesObj).map(([propName, Note]) => Note);
