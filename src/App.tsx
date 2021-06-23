@@ -1,10 +1,17 @@
 import React from 'react';
-// import IntervalTraining from './components/IntervalTraining';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ScaleDegrees from './components/ScaleDegrees';
 
 function App() {
   return (
-    <ScaleDegrees/>
+    <BrowserRouter>
+      <Switch>
+        <Route path = '/degrees'>
+          <ScaleDegrees/>
+        </Route>
+      </Switch>
+    </BrowserRouter>
+    
   );
 }
 
