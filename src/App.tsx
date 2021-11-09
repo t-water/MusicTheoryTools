@@ -1,6 +1,9 @@
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ScaleDegrees from './components/ScaleDegrees';
+
+initializeIcons();
 
 function App() {
   return (
@@ -11,7 +14,6 @@ function App() {
         </Route>
       </Switch>
     </BrowserRouter>
-    
   );
 }
 
