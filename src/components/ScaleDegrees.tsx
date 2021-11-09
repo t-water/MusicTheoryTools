@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useGetNoteSequence } from '../hooks/useGetNoteSequence';
 import { Note, NotesArr } from '../types/Note';
 import { ScalesObj } from '../types/Scale';
-import { ChoiceGroup, CommandBar, DefaultButton, IChoiceGroupOption, ICommandBarItemProps, Panel } from '@fluentui/react';
+import { ChoiceGroup, CommandBar, DefaultButton, IChoiceGroupOption, ICommandBarItemProps, Panel, Stack } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import useScoring from '../hooks/useScoring';
+import { getSettingsCommandBarItem } from '../types/CommonElements';
 
 
 const {Major} = ScalesObj;
@@ -27,7 +28,7 @@ const ScaleDegrees = (props: IScaleDegreesProps) => {
     const [previousScaleDegree, setPreviousScaleDegree] = useState<number>(-1);
     const [selectedScale, setSelectedScale] = useState<Note>(NotesArr[0]);
     const [panelIsOpen, {setFalse: closePanel, setTrue: openPanel}] = useBoolean(false);
-    const {numberCorrect, total, incrementCorrect, incrementIncorrect } = useScoring();
+    const { incrementCorrect, incrementIncorrect, scorePrintOut } = useScoring();
     
     const getNoteSequence = useGetNoteSequence();
     const currentScale = getNoteSequence(selectedScale, Major);
@@ -95,27 +96,20 @@ const ScaleDegrees = (props: IScaleDegreesProps) => {
         } 
 
         return (
-            <DefaultButton
-                disabled = {noteHasBeenGuessIncorrectly}
-                style = {{marginRight: '5px', ...buttonStyle}}
-                onClick = {(e: React.MouseEvent<HTMLButtonElement>) => onClickGuessButton(e, note)}
-                key = {note.DistanceFromC}
-            >
-                {note.Abbreviation}
-            </DefaultButton>
+            <Stack.Item style = {{marginTop: '10px'}}>
+                <DefaultButton
+                    disabled = {noteHasBeenGuessIncorrectly}
+                    style = {{marginRight: '5px', ...buttonStyle}}
+                    onClick = {(e: React.MouseEvent<HTMLButtonElement>) => onClickGuessButton(e, note)}
+                    key = {note.DistanceFromC}
+                >
+                    {note.Abbreviation}
+                </DefaultButton>
+            </Stack.Item>
         )
     });
 
-    const farCommandBarItems: ICommandBarItemProps[] = [
-        {
-            key: 'Open Scale Picker',
-            text: 'Select Key',
-            iconProps: { iconName: 'Settings' },
-            onClick: openPanel,
-        },
-    ]
-
-    const scorePrintOut: string = `${numberCorrect} / ${total}`
+    const farCommandBarItems: ICommandBarItemProps[] = [getSettingsCommandBarItem('Select Key', openPanel)];
 
     return (
         <>
@@ -123,8 +117,8 @@ const ScaleDegrees = (props: IScaleDegreesProps) => {
               items={[]}
               farItems={farCommandBarItems}
               ariaLabel="Use left and right arrow keys to navigate between commands"
-              style = {{backgroundColor: 'lightgray'}}
             />
+            
             <div style = {{fontSize: '20px', textAlign: 'center'}}>
                 <div>{scorePrintOut}</div>
                 <div>Selected Key: <strong>{selectedScale.Name}</strong></div>
@@ -132,9 +126,9 @@ const ScaleDegrees = (props: IScaleDegreesProps) => {
             </div>
             
 
-            <div style = {{marginTop: '10px'}}>
+            <Stack horizontal wrap horizontalAlign="center" style = {{marginTop: '10px'}}>
                 {guessNoteButtons}
-            </div>
+            </Stack>
 
             <Panel
                 isOpen={panelIsOpen}
