@@ -1,38 +1,64 @@
-import { CommandBar, Dropdown, ICommandBarItemProps, IDropdownOption, Panel, Toggle } from '@fluentui/react';
+import { CommandBar, DefaultButton, Dropdown, ICommandBarItemProps, IDropdownOption, Panel, Toggle } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import React, { useState } from 'react';
 import useGetIntervalNote from '../hooks/useGetIntervalNote';
 import useGetRandomNote from '../hooks/useGetRandomNote';
+import useScoring from '../hooks/useScoring';
 import { getSettingsCommandBarItem } from '../types/CommonElements';
-import { IInterval, intervalArr } from '../types/Interval';
+import { Interval, intervalArr } from '../types/Interval';
 import { Note } from '../types/Note';
 
 interface IIntervalTrainingProps{}
 
-const intervalDropdownOptions: IDropdownOption[] = intervalArr.map((interval: IInterval) => ({
+const intervalDropdownOptions: IDropdownOption[] = intervalArr.map((interval: Interval) => ({
     key: interval.abbreviation,
     text: interval.name,
     data: interval.distance
 }));
 
-const initialSelectedItervalKeys = intervalArr.map((interval: IInterval) => interval.abbreviation);
+const initialSelectedItervalKeys = intervalArr.map((interval: Interval) => interval.abbreviation);
+
+const incorrectGuesses: Set<Interval> = new Set();
 
 const IntervalTraining = (props: IIntervalTrainingProps) => { 
     const getRandomNote = useGetRandomNote();
-    const {getAscending} = useGetIntervalNote();
-    const [randomNote, setRandomNote] = useState<Note>(getRandomNote());
-    const [currentInterval, setCurrentInterval] = useState<IInterval>();
+    const [startingNote, setStartingNote] = useState<Note>(getRandomNote());
+    const [endingNote, setEndingNote] = useState<Note>(getRandomNote());
     const [panelIsOpen, {setFalse: closePanel, setTrue: openPanel}] = useBoolean(false);
     const [selectedIntervalKeys, setSelectedIntervalKeys] = useState<string[]>([...initialSelectedItervalKeys]);
+    const { getAscending } = useGetIntervalNote();
+    const { incrementCorrect, incrementIncorrect, scorePrintOut, percentPrintOut } = useScoring();
 
-    const intervalsInUse: IInterval[] = selectedIntervalKeys.map((key: string) => {
-        return intervalArr.filter((interval: IInterval) => interval.abbreviation === key)[0];
+    const intervalsInUse: Interval[] = selectedIntervalKeys.map((key: string) => {
+        return intervalArr.filter((interval: Interval) => interval.abbreviation === key)[0];
     })
 
-    const intervalButtons: JSX.Element[] = intervalsInUse.map((interval: IInterval) => {
+    const onClickIntervalButton = (e: React.MouseEvent<HTMLButtonElement>, interval: Interval) => {
+        e.preventDefault();
+
+        if (getAscending(startingNote, interval).DistanceFromC === endingNote.DistanceFromC) {
+            incorrectGuesses.clear();
+            incrementCorrect();
+            setStartingNote(getRandomNote());
+            setEndingNote(getRandomNote());
+        } else {
+            incrementIncorrect();
+            incorrectGuesses.add(interval);
+        }
+    }
+
+    const intervalButtons: JSX.Element[] = intervalsInUse.map((interval: Interval) => {
+        const intervalButtonStyle: React.CSSProperties = incorrectGuesses.has(interval) ? {backgroundColor: 'red', color: 'white'} : {};
+
         return (
             <div key = {interval.abbreviation}>
-                <button onClick = {(e: React.MouseEvent<HTMLButtonElement>) => {e.preventDefault(); setCurrentInterval(interval)}}>{interval.name}</button>
+                <DefaultButton
+                    onClick = {(e: React.MouseEvent<HTMLButtonElement>) => onClickIntervalButton(e, interval)}
+                    style = {{width: '150px', marginBottom: '5px', ...intervalButtonStyle}}
+                    disabled = {incorrectGuesses.has(interval)}
+                >
+                    {interval.name}
+                </DefaultButton>
             </div>
         );
     });
@@ -87,11 +113,12 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
                 farItems={farCommandBarItems}
                 ariaLabel="Use left and right arrow keys to navigate between commands"
             />
-            
-            <div>{randomNote.Abbreviation}</div>
-            <div>{currentInterval ? getAscending(randomNote, currentInterval).Abbreviation : ''}</div>
-            <div>
-                <button onClick = {(e: React.MouseEvent<HTMLButtonElement>) => {e.preventDefault(); setRandomNote(getRandomNote())}}>New Starting Note</button>
+
+            <div style = {{fontSize: '20px', textAlign: 'center'}}>
+                <div>{scorePrintOut} {percentPrintOut}</div>
+                <div>
+                    <strong>{startingNote.Abbreviation}</strong> {'->'} <strong>{endingNote.Abbreviation}</strong>
+                </div>
             </div>
 
             {intervalButtons}

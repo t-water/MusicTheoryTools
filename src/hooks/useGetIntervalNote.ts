@@ -1,11 +1,11 @@
 import { SEMI_TONES_IN_AN_OCTAVE } from "../types/Constants";
-import { IInterval } from "../types/Interval";
+import { Interval } from "../types/Interval";
 import { Note, NotesArr } from "../types/Note";
 
 interface IUseGetIntervalNote{
     getNoteFromDistanceFromC: (distance: number) => Note;
-    getAscending: (note: Note, interval: IInterval) => Note;
-    getDescending: (note: Note, interval: IInterval) => Note;
+    getAscending: (note: Note, interval: Interval) => Note;
+    getDescending: (note: Note, interval: Interval) => Note;
 }
 
 const getNoteFromDistanceFromC = (distance: number): Note => {
@@ -20,11 +20,11 @@ const getNoteViaDistance = (startingNote: Note, distance: number): Note => {
     return getNoteFromDistanceFromC(newDistance);
 }
 
-const getAscending = (note: Note, interval: IInterval): Note => {
+const getAscending = (note: Note, interval: Interval): Note => {
     return getNoteViaDistance(note, interval.distance);
 }
 
-const getDescending =(note: Note, interval: IInterval): Note => {
+const getDescending =(note: Note, interval: Interval): Note => {
     return getNoteViaDistance(note, -interval.distance);
 }
 

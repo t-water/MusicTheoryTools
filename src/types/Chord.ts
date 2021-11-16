@@ -1,20 +1,20 @@
-import { IInterval, intervalObj } from "./Interval";
+import { Interval, intervalObj } from "./Interval";
 
 const {MajorThird, MinorThird} = intervalObj;
 
 interface Chords {
-  Major: IInterval[];
-  Minor: IInterval[];
-  MajorSeventh: IInterval[];
-  MinorSeventh: IInterval[];
-  DominantSeventh: IInterval[];
+  Major: Interval[];
+  Minor: Interval[];
+  MajorSeventh: Interval[];
+  MinorSeventh: Interval[];
+  DominantSeventh: Interval[];
 }
 
-const MajorChordIntervals: IInterval[] = [MajorThird, MinorThird];
-const MajorSeventhChordIntervals: IInterval[] = [MajorThird, MinorThird, MajorThird];
-const MinorChordIntervals: IInterval[] = [MinorThird, MajorThird];
-const MinorSeventhChordIntervals: IInterval[] = [MinorThird, MajorThird, MinorThird];
-const DominantSeventhChordIntervals: IInterval[] = [MajorThird, MinorThird, MinorThird];
+const MajorChordIntervals: Interval[] = [MajorThird, MinorThird];
+const MajorSeventhChordIntervals: Interval[] = [MajorThird, MinorThird, MajorThird];
+const MinorChordIntervals: Interval[] = [MinorThird, MajorThird];
+const MinorSeventhChordIntervals: Interval[] = [MinorThird, MajorThird, MinorThird];
+const DominantSeventhChordIntervals: Interval[] = [MajorThird, MinorThird, MinorThird];
 
 export const ChordsObj: Chords = {
   Major: MajorChordIntervals,

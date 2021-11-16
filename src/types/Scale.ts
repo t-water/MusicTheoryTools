@@ -1,15 +1,15 @@
-import { IInterval, intervalObj } from "./Interval";
+import { Interval, intervalObj } from "./Interval";
 
 const {MinorSecond, MajorSecond} = intervalObj
 
 interface Scales {
-    Major: IInterval[];
-    Minor: IInterval[];
+    Major: Interval[];
+    Minor: Interval[];
 }
 
-const MajorScaleIntervals: IInterval[] = [ MajorSecond, MajorSecond, MinorSecond, MajorSecond, MajorSecond, MajorSecond ];
+const MajorScaleIntervals: Interval[] = [ MajorSecond, MajorSecond, MinorSecond, MajorSecond, MajorSecond, MajorSecond ];
 
-const MinorScaleIntervals: IInterval[] = [ MajorSecond, MinorSecond, MajorSecond, MajorSecond, MinorSecond, MajorSecond ];
+const MinorScaleIntervals: Interval[] = [ MajorSecond, MinorSecond, MajorSecond, MajorSecond, MinorSecond, MajorSecond ];
 
 export const ScalesObj: Scales = {
     Major: MajorScaleIntervals,
