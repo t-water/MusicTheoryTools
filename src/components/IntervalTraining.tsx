@@ -1,22 +1,14 @@
-import { CommandBar, DefaultButton, Dropdown, ICommandBarItemProps, IDropdownOption, Panel, Toggle } from '@fluentui/react';
+import { CommandBar, DefaultButton, ICommandBarItemProps, Panel, Toggle } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import React, { useState } from 'react';
 import useGetIntervalNote from '../hooks/useGetIntervalNote';
 import useGetRandomNote from '../hooks/useGetRandomNote';
 import useScoring from '../hooks/useScoring';
 import { getSettingsCommandBarItem } from '../types/CommonElements';
-import { Interval, intervalArr } from '../types/Interval';
+import { IIntervalBooleans, Interval, intervalObj, intervalBooleansFalse, intervalBooleansTrue } from '../types/Interval';
 import { Note } from '../types/Note';
 
 interface IIntervalTrainingProps{}
-
-const intervalDropdownOptions: IDropdownOption[] = intervalArr.map((interval: Interval) => ({
-    key: interval.abbreviation,
-    text: interval.name,
-    data: interval.distance
-}));
-
-const initialSelectedItervalKeys = intervalArr.map((interval: Interval) => interval.abbreviation);
 
 const incorrectGuesses: Set<Interval> = new Set();
 
@@ -25,13 +17,9 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
     const [startingNote, setStartingNote] = useState<Note>(getRandomNote());
     const [endingNote, setEndingNote] = useState<Note>(getRandomNote());
     const [panelIsOpen, {setFalse: closePanel, setTrue: openPanel}] = useBoolean(false);
-    const [selectedIntervalKeys, setSelectedIntervalKeys] = useState<string[]>([...initialSelectedItervalKeys]);
+    const [selectedIntervals, setSelectedIntervals] = useState<IIntervalBooleans>({...intervalBooleansTrue});
     const { getAscending } = useGetIntervalNote();
     const { incrementCorrect, incrementIncorrect, scorePrintOut, percentPrintOut } = useScoring();
-
-    const intervalsInUse: Interval[] = selectedIntervalKeys.map((key: string) => {
-        return intervalArr.filter((interval: Interval) => interval.abbreviation === key)[0];
-    })
 
     const onClickIntervalButton = (e: React.MouseEvent<HTMLButtonElement>, interval: Interval) => {
         e.preventDefault();
@@ -47,60 +35,76 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
         }
     }
 
-    const intervalButtons: JSX.Element[] = intervalsInUse.map((interval: Interval) => {
-        const intervalButtonStyle: React.CSSProperties = incorrectGuesses.has(interval) ? {backgroundColor: 'red', color: 'white'} : {};
+    const intervalButtons: JSX.Element[] = Object.entries(intervalObj).map(([propName, interval]) => {
+        if ((selectedIntervals as any)[propName]) {
+            const intervalButtonStyle: React.CSSProperties = incorrectGuesses.has(interval) ? {backgroundColor: 'red', color: 'white'} : {};
 
-        return (
-            <div key = {interval.abbreviation}>
-                <DefaultButton
-                    onClick = {(e: React.MouseEvent<HTMLButtonElement>) => onClickIntervalButton(e, interval)}
-                    style = {{width: '150px', marginBottom: '5px', ...intervalButtonStyle}}
-                    disabled = {incorrectGuesses.has(interval)}
-                >
-                    {interval.name}
-                </DefaultButton>
-            </div>
-        );
+            return (
+                <div key = {interval.abbreviation}>
+                    <DefaultButton
+                        onClick = {(e: React.MouseEvent<HTMLButtonElement>) => onClickIntervalButton(e, interval)}
+                        style = {{width: '150px', marginBottom: '5px', ...intervalButtonStyle}}
+                        disabled = {incorrectGuesses.has(interval)}
+                    >
+                        {interval.name}
+                    </DefaultButton>
+                </div>
+            );
+        } else {
+            return <></>;
+        }
     });
 
     const farCommandBarItems: ICommandBarItemProps[] = [getSettingsCommandBarItem('Select Intervals', openPanel)];
 
-    const onSelectInterval = (e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption<any>) => {
-        const updatedSelectedIntervalOptions = [...selectedIntervalKeys];
+    const onChangeIntervalSelector = (propName: string, interval: Interval, checked?: boolean) => {
+        const updatedSelectedIntervals: any = {...selectedIntervals};
 
-        if (option) {
-            const selectedKey: string = option.key as string;
-
-            if (option.selected) {
-                updatedSelectedIntervalOptions.push(selectedKey);
-            } else {
-                const itemIndex: number = updatedSelectedIntervalOptions.indexOf(selectedKey);
-                updatedSelectedIntervalOptions.splice(itemIndex, 1);
-            }
+        if (checked) {
+            updatedSelectedIntervals[propName] = true;
+        } else {
+            updatedSelectedIntervals[propName] = false;
         }
+        
+        setSelectedIntervals(updatedSelectedIntervals);
+    }
 
-        setSelectedIntervalKeys(updatedSelectedIntervalOptions);
+    let intervalSelectors: JSX.Element[] = [];
+
+    if (panelIsOpen) {
+        intervalSelectors = Object.entries(intervalObj).map(([propName, interval]) => {
+            return (
+                <Toggle
+                    label = {interval.name}
+                    onText = 'On'
+                    offText = 'Off'
+                    checked = {(selectedIntervals as any)[propName]}
+                    onChange = {(event: React.MouseEvent<HTMLElement, MouseEvent>, checked?: boolean) => onChangeIntervalSelector(propName, interval, checked)}
+                />
+            );
+        });
     }
 
     const toggleSelectAllIntervals = (event: React.MouseEvent<HTMLElement, MouseEvent>, checked?: boolean) => {
-        let updatedSelectedIntervalKeys: string[] = [];
-
         if (checked) {
-            updatedSelectedIntervalKeys = [...initialSelectedItervalKeys];
-        } 
-
-        setSelectedIntervalKeys(updatedSelectedIntervalKeys);
+            setSelectedIntervals({...intervalBooleansTrue});
+        } else {
+            setSelectedIntervals({...intervalBooleansFalse});
+        }
     }
 
-    let intervalToggle: JSX.Element = <></>;
+    let toggleAllIntervals: JSX.Element = <></>;
 
     if (panelIsOpen) {
-        intervalToggle = (
+        const reducer = (prev: boolean, curr: boolean) => prev && curr;
+        const allIntervalsSelected: boolean = Object.values(selectedIntervals).reduce(reducer, true);
+        
+        toggleAllIntervals = (
             <Toggle
                 label = 'Toggle Select All'
                 onText = 'All Selected'
                 offText = ''
-                checked = {selectedIntervalKeys.length === intervalArr.length}
+                checked = {allIntervalsSelected}
                 onChange = {toggleSelectAllIntervals}
             />
         )
@@ -131,16 +135,9 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
                 closeButtonAriaLabel='Close Scale Selection Panel'
                 onDismiss={closePanel}
             >
-                {intervalToggle}
+                {toggleAllIntervals}
 
-                <Dropdown
-                    label = 'Intervals'
-                    placeholder = 'Select Intervals To Test'
-                    multiSelect
-                    selectedKeys = {selectedIntervalKeys}
-                    options = {intervalDropdownOptions}
-                    onChange = {onSelectInterval}
-                />
+                {intervalSelectors}
             </Panel>
         </>
     )

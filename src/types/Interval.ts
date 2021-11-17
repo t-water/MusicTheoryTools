@@ -4,20 +4,22 @@ export interface Interval{
     abbreviation: string;
 }
 
-interface IIntervals{
-    MinorSecond: Interval;
-    MajorSecond: Interval;
-    MinorThird: Interval;
-    MajorThird: Interval;
-    PerfectFourth: Interval;
-    Tritone: Interval;
-    PerfectFifth: Interval;
-    MinorSixth: Interval;
-    MajorSixth: Interval;
-    MinorSeventh: Interval;
-    MajorSeventh: Interval;
-    Octave: Interval;
+interface IGenericIntervals<T> {
+    MinorSecond: T;
+    MajorSecond: T;
+    MinorThird: T;
+    MajorThird: T;
+    PerfectFourth: T;
+    Tritone: T;
+    PerfectFifth: T;
+    MinorSixth: T;
+    MajorSixth: T;
+    MinorSeventh: T;
+    MajorSeventh: T;
+    Octave: T;
 }
+
+interface IIntervals extends IGenericIntervals<Interval> {};
 
 const MinorSecond: Interval = { distance: 1, name: 'Minor Second', abbreviation: 'm2' }
 
@@ -60,7 +62,9 @@ export const intervalObj: IIntervals = {
 
 export const intervalArr: Interval[] = Object.entries(intervalObj).map(([propName, interval]) => interval);
 
-export const intervalBooleans = {
+export interface IIntervalBooleans extends IGenericIntervals<boolean> {};
+
+export const intervalBooleansFalse: IIntervalBooleans = {
     MinorSecond: false,
     MajorSecond: false,
     MinorThird: false,
@@ -73,4 +77,19 @@ export const intervalBooleans = {
     MinorSeventh: false,
     MajorSeventh: false,
     Octave: false
+};
+
+export const intervalBooleansTrue: IIntervalBooleans = {
+    MinorSecond: true,
+    MajorSecond: true,
+    MinorThird: true,
+    MajorThird: true,
+    PerfectFourth: true,
+    Tritone: true,
+    PerfectFifth: true,
+    MinorSixth: true,
+    MajorSixth: true,
+    MinorSeventh: true,
+    MajorSeventh: true,
+    Octave: true
 };
