@@ -39,8 +39,8 @@ const useScoring = (initialNumberCorrect: number = 0, initialNumberIncorrect: nu
         incrementCorrect: incrementCorrect,
         incrementIncorrect: incrementIncorrect,
         resetScore: resetScore,
-        scorePrintOut: `${numberCorrect} / ${total}`,
-        percentPrintOut: `${percentage} %`
+        scorePrintOut: `${numberCorrect}/${total}`,
+        percentPrintOut: `${percentage}%`
     }
 }
 

@@ -1,4 +1,4 @@
-import { CommandBar, DefaultButton, ICommandBarItemProps, Panel, Toggle } from '@fluentui/react';
+import { CommandBar, DefaultButton, ICommandBarItemProps, Panel, PrimaryButton, Stack, Toggle } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import React, { useState } from 'react';
 import useGetIntervalNote from '../hooks/useGetIntervalNote';
@@ -12,6 +12,8 @@ interface IIntervalTrainingProps{}
 
 const incorrectGuesses: Set<Interval> = new Set();
 
+const stackItemMessageStyles: React.CSSProperties = {fontSize: '20px'};
+
 const IntervalTraining = (props: IIntervalTrainingProps) => { 
     const getRandomNote = useGetRandomNote();
     const [startingNote, setStartingNote] = useState<Note>(getRandomNote());
@@ -19,7 +21,7 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
     const [panelIsOpen, {setFalse: closePanel, setTrue: openPanel}] = useBoolean(false);
     const [selectedIntervals, setSelectedIntervals] = useState<IIntervalBooleans>({...intervalBooleansTrue});
     const { getAscending } = useGetIntervalNote();
-    const { incrementCorrect, incrementIncorrect, scorePrintOut, percentPrintOut } = useScoring();
+    const { incrementCorrect, incrementIncorrect, scorePrintOut, percentPrintOut, resetScore } = useScoring();
 
     const onClickIntervalButton = (e: React.MouseEvent<HTMLButtonElement>, interval: Interval) => {
         e.preventDefault();
@@ -40,15 +42,15 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
             const intervalButtonStyle: React.CSSProperties = incorrectGuesses.has(interval) ? {backgroundColor: 'red', color: 'white'} : {};
 
             return (
-                <div key = {interval.abbreviation}>
+                <Stack.Item key = {interval.abbreviation}>
                     <DefaultButton
                         onClick = {(e: React.MouseEvent<HTMLButtonElement>) => onClickIntervalButton(e, interval)}
-                        style = {{width: '150px', marginBottom: '5px', ...intervalButtonStyle}}
+                        style = {{width: '150px', marginTop: '5px', ...intervalButtonStyle}}
                         disabled = {incorrectGuesses.has(interval)}
                     >
                         {interval.name}
                     </DefaultButton>
-                </div>
+                </Stack.Item>
             );
         } else {
             return <></>;
@@ -110,6 +112,12 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
         )
     }
 
+    const onClickResetButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        resetScore();
+        incorrectGuesses.clear();
+    }
+
     return (
         <>
             <CommandBar
@@ -118,14 +126,20 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
                 ariaLabel="Use left and right arrow keys to navigate between commands"
             />
 
-            <div style = {{fontSize: '20px', textAlign: 'center'}}>
-                <div>{scorePrintOut} {percentPrintOut}</div>
-                <div>
+            <Stack horizontalAlign="center">
+                <Stack.Item style = {stackItemMessageStyles}>{scorePrintOut} {percentPrintOut}</Stack.Item>
+                <Stack.Item style = {stackItemMessageStyles}>
                     <strong>{startingNote.Abbreviation}</strong> {'->'} <strong>{endingNote.Abbreviation}</strong>
-                </div>
-            </div>
-
-            {intervalButtons}
+                </Stack.Item>
+                <Stack.Item>
+                    <PrimaryButton 
+                        text = 'Reset'
+                        onClick = {onClickResetButton}
+                    />
+                </Stack.Item>
+            
+                {intervalButtons}
+            </Stack>
 
             <Panel
                 isOpen={panelIsOpen}
