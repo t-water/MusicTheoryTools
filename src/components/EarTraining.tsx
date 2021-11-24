@@ -5,49 +5,44 @@ import { INoteSound, MAX_DISTANCE_FROM_MIDDLE_C, MIN_DISTANCE_FROM_MIDDLE_C, not
 interface IEarTrainingProps {
 }
 
+const getAudioElement = (noteSound: INoteSound): HTMLAudioElement => {
+    const audio = document.createElement('audio');
+    const source = document.createElement('source');
+
+    audio.muted = true;
+    audio.autoplay = true;
+
+    source.src = `https://docs.google.com/uc?export=download&id=${noteSound.GoogleDriveId}`;
+    source.type = 'audio/wav';
+
+    audio.appendChild(source);
+
+    return audio;
+}
+
 const EarTraining = (props: IEarTrainingProps) => { 
-    const maxDistance: number = MAX_DISTANCE_FROM_MIDDLE_C-1;
-    const minDistance: number = MIN_DISTANCE_FROM_MIDDLE_C+1;
-    const randomNoteDistance: number = Math.floor(Math.random() * (maxDistance - minDistance)) + minDistance;
+    const randomIntervalDistance: number = Math.floor(Math.random() * SEMI_TONES_IN_AN_OCTAVE) + 1;
 
-    const firstNoteSound: INoteSound = noteSoundsArr.filter((noteSound: INoteSound) => noteSound.DistanceFromMiddleC === randomNoteDistance)[0];
+    const minDistanceFromMiddleC = MIN_DISTANCE_FROM_MIDDLE_C;
+    const maxDistanceFromMiddleC = MAX_DISTANCE_FROM_MIDDLE_C - randomIntervalDistance;
 
-    const possibleNoteSounds: INoteSound[] = noteSoundsArr.filter((noteSound: INoteSound) => {
-        const noteIsHigherThanFirst: boolean = noteSound.DistanceFromMiddleC > firstNoteSound.DistanceFromMiddleC;
-        const noteIsWithinOneOctave: boolean = noteSound.DistanceFromMiddleC <= Math.min(randomNoteDistance + SEMI_TONES_IN_AN_OCTAVE, maxDistance+1);
+    const firstNoteDistance: number = Math.floor(Math.random() * (maxDistanceFromMiddleC - minDistanceFromMiddleC + 1) + minDistanceFromMiddleC);
+    const secondNoteDistance: number = firstNoteDistance + randomIntervalDistance;
 
-        return noteIsHigherThanFirst && noteIsWithinOneOctave;
-    });
+    const firstNoteSound: INoteSound = noteSoundsArr.filter((noteSound: INoteSound) => noteSound.DistanceFromMiddleC === firstNoteDistance)[0];
+    const secondNoteSound: INoteSound = noteSoundsArr.filter((noteSound: INoteSound) => noteSound.DistanceFromMiddleC === secondNoteDistance)[0];
 
-    const secondNoteSoundsIndex: number = Math.floor(Math.random() * possibleNoteSounds.length);
+    const firstNoteAudio = getAudioElement(firstNoteSound);
+    const secondNoteAudio = getAudioElement(secondNoteSound);
 
-    const secondNoteSound: INoteSound = possibleNoteSounds[secondNoteSoundsIndex];
+    firstNoteAudio.play();
 
-    const firstNoteAudio: JSX.Element =  (
-        <audio controls>
-            <source src = {`https://docs.google.com/uc?export=download&id=${firstNoteSound.GoogleDriveId}`} type = 'audio/wav'/>
-        </audio>
-    )
-    
-    const secondNoteAudio: JSX.Element =  (
-        <audio controls>
-            <source src = {`https://docs.google.com/uc?export=download&id=${secondNoteSound.GoogleDriveId}`} type = 'audio/wav'/>
-        </audio>
-    )
+    setTimeout(() => {
+        secondNoteAudio.play();
+    }, 1000)
 
     return (
         <>
-            <div>
-                <span>{firstNoteSound.Note.Abbreviation}</span>
-
-                { firstNoteAudio }
-            </div>
-
-            <div>
-                <span>{secondNoteSound.Note.Abbreviation}</span>
-
-                { secondNoteAudio }
-            </div>
         </>
     )
 }

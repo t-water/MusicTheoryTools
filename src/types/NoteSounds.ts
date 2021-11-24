@@ -22,6 +22,7 @@ export interface INoteSounds {
     A3: INoteSound;
     ASharp3: INoteSound;
     B3: INoteSound;
+    C4: INoteSound;
 }
 
 export const noteSounds: INoteSounds = {
@@ -96,7 +97,13 @@ export const noteSounds: INoteSounds = {
         Note: B,
         GoogleDriveId: '1KZpfS0_k0zuF1nRwXx8aSirCSemOQp1_',
         DistanceFromMiddleC: -1
-    }
+    },
+    C4: {
+        Octave: 4,
+        Note: C,
+        GoogleDriveId: '1BpkFD9_749hMLSlWuRR8XL8aLB4GAaqy',
+        DistanceFromMiddleC: 0
+    },
 }
 
 export const noteSoundsArr: INoteSound[] = Object.entries(noteSounds).map(([propName, noteSound]) => noteSound);
