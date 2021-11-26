@@ -22,7 +22,7 @@ function App() {
           <EarTraining/>
         </Route>
         <Route path = '/piano'>
-          <Piano/>
+          <Piano startingNoteSound = 'C3' endingNoteSound = 'C4'/>
         </Route>
       </Switch>
     </BrowserRouter>

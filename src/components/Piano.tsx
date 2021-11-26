@@ -1,5 +1,6 @@
 import React from 'react';
-// import { INoteSound } from '../types/NoteSounds';
+import { noteSounds, noteSoundsArr, NoteSoundsName } from '../types/NoteSounds';
+import { INoteSound } from '../types/NoteSounds';
 // import { Note } from '../types/Note';
 
 interface IKeyProps {
@@ -51,11 +52,23 @@ const BlackKey = (props: IBlackKeyProps) => {
 }
 
 interface IPianoProps {
-    // startingNoteSound: INoteSound;
-    // endingNoteSound: INoteSound;
+    startingNoteSound: NoteSoundsName | INoteSound;
+    endingNoteSound: NoteSoundsName | INoteSound;
 }
 
 const Piano = (props: IPianoProps) => { 
+    const getNoteSoundDistanceFromAZero = (noteSound: NoteSoundsName | INoteSound): number => {
+        let noteSoundObject: INoteSound;
+
+        if (typeof noteSound === 'string') {
+            noteSoundObject = noteSounds[noteSound];
+        } else{
+            noteSoundObject = noteSound;
+        }
+
+        return noteSoundObject.DistanceFromAZero;
+    }
+
     const whiteKeyWidth: number = 40;
     const whiteKeyBorderThickness: number = 1;
     const whiteKeyWidthWithBorder: number = whiteKeyWidth + whiteKeyBorderThickness * 2;
@@ -64,26 +77,38 @@ const Piano = (props: IPianoProps) => {
     const blackKeyWidth: number = 25;
     const blackKeyBorderThickness: number = 1;
     const blackKeyWidthWithBorder: number = blackKeyWidth + blackKeyBorderThickness * 2;
+    const halfBlackWidth: number = blackKeyWidthWithBorder / 2;
 
-    for (let i=0; i<7; i++) {
-        keys.push(
-            <WhiteKey 
-                key = {i} 
-                keyWidth = {whiteKeyWidth} 
-                borderThickness = {whiteKeyBorderThickness} 
-                left = {whiteKeyWidthWithBorder * i} 
-            />
-        );
+    const startingKeyDistanceFromAZero: number = getNoteSoundDistanceFromAZero(props.startingNoteSound);
+    const endingKeyDistanceFromAZero: number = getNoteSoundDistanceFromAZero(props.endingNoteSound);
 
-        if (i !== 2 && i < 6) {
+    let currentWidth: number = 0;
+
+    for (let i=startingKeyDistanceFromAZero; i<=endingKeyDistanceFromAZero; i++) {
+        const currentNoteSound: INoteSound = noteSoundsArr.filter((sound: INoteSound) => sound.DistanceFromAZero === i)[0];
+
+        const positionInSequence: number = i - startingKeyDistanceFromAZero;
+
+        if (!currentNoteSound.Note.IsAccidental) {
+            keys.push(
+                <WhiteKey 
+                    key = {i} 
+                    keyWidth = {whiteKeyWidth} 
+                    borderThickness = {whiteKeyBorderThickness} 
+                    left = {currentWidth} 
+                />
+            );
+
+            currentWidth += whiteKeyWidthWithBorder;
+        } else {
             keys.push(
                 <BlackKey
                     key = {i}
                     keyWidth = {blackKeyWidth}
                     borderThickness = {blackKeyBorderThickness}
-                    left = {whiteKeyWidthWithBorder * (i+1) - blackKeyWidthWithBorder / 2}
+                    left = {currentWidth - halfBlackWidth}
                 />
-            )
+            );
         }
     }
 
