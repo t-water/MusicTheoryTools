@@ -1,14 +1,16 @@
 import React from 'react';
+// import { INoteSound } from '../types/NoteSounds';
+// import { Note } from '../types/Note';
 
-interface IPianoProps {
-
-}
-
-interface IWhiteKeyProps {
+interface IKeyProps {
     keyWidth: number;
     borderThickness: number;
     left: number;
     key: number;
+    // note: Note;
+}
+
+interface IWhiteKeyProps extends IKeyProps{
 }
 
 const WhiteKey = (props: IWhiteKeyProps) => {
@@ -28,11 +30,7 @@ const WhiteKey = (props: IWhiteKeyProps) => {
     )
 }
 
-interface IBlackKeyProps {
-    key: number;
-    keyWidth: number;
-    borderThickness: number;
-    left: number;
+interface IBlackKeyProps extends IKeyProps{
 }
 
 const BlackKey = (props: IBlackKeyProps) => {
@@ -52,14 +50,23 @@ const BlackKey = (props: IBlackKeyProps) => {
     )
 }
 
+interface IPianoProps {
+    // startingNoteSound: INoteSound;
+    // endingNoteSound: INoteSound;
+}
+
 const Piano = (props: IPianoProps) => { 
     const whiteKeyWidth: number = 40;
     const whiteKeyBorderThickness: number = 1;
     const whiteKeyWidthWithBorder: number = whiteKeyWidth + whiteKeyBorderThickness * 2;
-    const whiteKeys: JSX.Element[] = [];
+    const keys: JSX.Element[] = [];
 
-    for (let i=0; i<8; i++) {
-        whiteKeys.push(
+    const blackKeyWidth: number = 25;
+    const blackKeyBorderThickness: number = 1;
+    const blackKeyWidthWithBorder: number = blackKeyWidth + blackKeyBorderThickness * 2;
+
+    for (let i=0; i<7; i++) {
+        keys.push(
             <WhiteKey 
                 key = {i} 
                 keyWidth = {whiteKeyWidth} 
@@ -67,16 +74,9 @@ const Piano = (props: IPianoProps) => {
                 left = {whiteKeyWidthWithBorder * i} 
             />
         );
-    }
 
-    const blackKeyWidth: number = 25;
-    const blackKeyBorderThickness: number = 1;
-    const blackKeyWidthWithBorder: number = blackKeyWidth + blackKeyBorderThickness * 2;
-    const blackKeys: JSX.Element[] = [];
-
-    for (let i=0; i<6; i++) {
-        if (i !== 2) {
-            blackKeys.push(
+        if (i !== 2 && i < 6) {
+            keys.push(
                 <BlackKey
                     key = {i}
                     keyWidth = {blackKeyWidth}
@@ -89,9 +89,7 @@ const Piano = (props: IPianoProps) => {
 
     return (
         <div style = {{margin: '5px 10px', position: 'relative'}}>
-            {whiteKeys}
-
-            {blackKeys}
+            {keys}
         </div>
     )
 }

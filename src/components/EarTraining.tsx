@@ -29,8 +29,8 @@ const EarTraining = (props: IEarTrainingProps) => {
     const firstNoteDistance: number = Math.floor(Math.random() * (maxDistanceFromMiddleC - minDistanceFromMiddleC + 1) + minDistanceFromMiddleC);
     const secondNoteDistance: number = firstNoteDistance + randomIntervalDistance;
 
-    const firstNoteSound: INoteSound = noteSoundsArr.filter((noteSound: INoteSound) => noteSound.DistanceFromMiddleC === firstNoteDistance)[0];
-    const secondNoteSound: INoteSound = noteSoundsArr.filter((noteSound: INoteSound) => noteSound.DistanceFromMiddleC === secondNoteDistance)[0];
+    const firstNoteSound: INoteSound = noteSoundsArr.filter((noteSound: INoteSound) => noteSound.DistanceFromAZero === firstNoteDistance)[0];
+    const secondNoteSound: INoteSound = noteSoundsArr.filter((noteSound: INoteSound) => noteSound.DistanceFromAZero === secondNoteDistance)[0];
 
     const firstNoteAudio = getAudioElement(firstNoteSound);
     const secondNoteAudio = getAudioElement(secondNoteSound);
