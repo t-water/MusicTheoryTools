@@ -3,6 +3,7 @@ import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import EarTraining from './components/EarTraining';
 import IntervalTraining from './components/IntervalTraining';
+import Piano from './components/Piano';
 import ScaleDegrees from './components/ScaleDegrees';
 
 initializeIcons();
@@ -19,6 +20,9 @@ function App() {
         </Route>
         <Route path = '/eartraining'>
           <EarTraining/>
+        </Route>
+        <Route path = '/piano'>
+          <Piano/>
         </Route>
       </Switch>
     </BrowserRouter>
