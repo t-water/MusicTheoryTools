@@ -1,0 +1,8 @@
+.white-key:hover {
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(208,208,208,1) 100%);
+}
+
+.black-key:hover {
+    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(92,92,92,1) 100%);
+
+}

@@ -1,27 +1,18 @@
 import React from 'react';
 import { noteSounds, noteSoundsArr, NoteSoundsName } from '../types/NoteSounds';
 import { INoteSound } from '../types/NoteSounds';
+import './Piano.css';
 
 interface IKeyProps {
-    keyWidth: number;
-    borderThickness: number;
-    left: number;
-    key: number;
+    className: string;
+    key: React.Key;
     noteSound: INoteSound;
+    style: React.CSSProperties;
 }
 
-interface IWhiteKeyProps extends IKeyProps{
-}
-
-const WhiteKey = (props: IWhiteKeyProps) => {
-    const whiteKeyWidthHeightRatio: number = 5.626;
-
-    const whiteKeyStyle: React.CSSProperties = {
-        border: `${props.borderThickness}px solid black`,
+const Key = (props: IKeyProps) => {
+    const keyStyle: React.CSSProperties = {
         borderRadius: '0 0 3% 3%',
-        height: `${props.keyWidth * whiteKeyWidthHeightRatio}px`,
-        width: `${props.keyWidth}px`,
-        left: `${props.left}px`,
         position: 'absolute'
     }
 
@@ -42,28 +33,55 @@ const WhiteKey = (props: IWhiteKeyProps) => {
     }
 
     return (
-        <div key = {props.key} style = {whiteKeyStyle} onMouseDown = {onMouseDown} onMouseEnter = {onMouseEnter}></div>
+        <div 
+            className = {props.className}
+            key = {props.key} 
+            style = {{...keyStyle, ...props.style}} 
+            onMouseDown = {onMouseDown} 
+            onMouseEnter = {onMouseEnter}
+        >
+        </div> 
     )
 }
 
-interface IBlackKeyProps extends IKeyProps{
+interface IBaseKeyProps {
+    keyWidth: number;
+    borderThickness: number;
+    left: number;
+    key: number;
+    noteSound: INoteSound;
+}
+
+interface IWhiteKeyProps extends IBaseKeyProps{
+}
+
+const WhiteKey = (props: IWhiteKeyProps) => {
+    const whiteKeyWidthHeightRatio: number = 5.626;
+
+    const whiteKeyStyle: React.CSSProperties = {
+        border: `${props.borderThickness}px solid black`,
+        height: `${props.keyWidth * whiteKeyWidthHeightRatio}px`,
+        width: `${props.keyWidth}px`,
+        left: `${props.left}px`
+    }
+
+    return <Key className = 'white-key' noteSound = {props.noteSound} style = {whiteKeyStyle} key = {props.key}/>
+}
+
+interface IBlackKeyProps extends IBaseKeyProps{
 }
 
 const BlackKey = (props: IBlackKeyProps) => {
     const blackKeyStyle: React.CSSProperties = {
         backgroundColor: 'black',
         border: `${props.borderThickness}px solid black`,
-        borderRadius: '0 0 3% 3%',
-        position: 'absolute',
         height: '150px',
         width: `${props.keyWidth}px`,
         left: `${props.left}px`,
         zIndex: 1
     }
 
-    return (
-        <div key = {props.key} style = {blackKeyStyle}></div>
-    )
+    return <Key className = 'black-key' noteSound = {props.noteSound} style = {blackKeyStyle} key = {props.key}/>
 }
 
 interface IPianoProps {
