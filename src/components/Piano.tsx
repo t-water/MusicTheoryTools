@@ -1,14 +1,13 @@
 import React from 'react';
 import { noteSounds, noteSoundsArr, NoteSoundsName } from '../types/NoteSounds';
 import { INoteSound } from '../types/NoteSounds';
-// import { Note } from '../types/Note';
 
 interface IKeyProps {
     keyWidth: number;
     borderThickness: number;
     left: number;
     key: number;
-    // note: Note;
+    noteSound: INoteSound;
 }
 
 interface IWhiteKeyProps extends IKeyProps{
@@ -26,8 +25,24 @@ const WhiteKey = (props: IWhiteKeyProps) => {
         position: 'absolute'
     }
 
+    const playNote = () => {
+        props.noteSound.Audio.pause();
+        props.noteSound.Audio.currentTime = 0;
+        props.noteSound.Audio.play();
+    }
+
+    const onMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.buttons === 1) {
+            playNote();
+        }
+    };
+
+    const onMouseDown = () => {
+        playNote();
+    }
+
     return (
-        <div key = {props.key} style = {whiteKeyStyle}></div>
+        <div key = {props.key} style = {whiteKeyStyle} onMouseDown = {onMouseDown} onMouseEnter = {onMouseEnter}></div>
     )
 }
 
@@ -52,12 +67,12 @@ const BlackKey = (props: IBlackKeyProps) => {
 }
 
 interface IPianoProps {
-    startingNoteSound: NoteSoundsName | INoteSound;
-    endingNoteSound: NoteSoundsName | INoteSound;
+    startingNoteSound: NoteSoundsName;
+    endingNoteSound: NoteSoundsName;
 }
 
 const Piano = (props: IPianoProps) => { 
-    const getNoteSoundDistanceFromAZero = (noteSound: NoteSoundsName | INoteSound): number => {
+    const getNoteSoundDistanceFromAZero = (noteSound: NoteSoundsName): number => {
         let noteSoundObject: INoteSound;
 
         if (typeof noteSound === 'string') {
@@ -87,8 +102,6 @@ const Piano = (props: IPianoProps) => {
     for (let i=startingKeyDistanceFromAZero; i<=endingKeyDistanceFromAZero; i++) {
         const currentNoteSound: INoteSound = noteSoundsArr.filter((sound: INoteSound) => sound.DistanceFromAZero === i)[0];
 
-        const positionInSequence: number = i - startingKeyDistanceFromAZero;
-
         if (!currentNoteSound.Note.IsAccidental) {
             keys.push(
                 <WhiteKey 
@@ -96,6 +109,7 @@ const Piano = (props: IPianoProps) => {
                     keyWidth = {whiteKeyWidth} 
                     borderThickness = {whiteKeyBorderThickness} 
                     left = {currentWidth} 
+                    noteSound = {currentNoteSound}
                 />
             );
 
@@ -107,6 +121,7 @@ const Piano = (props: IPianoProps) => {
                     keyWidth = {blackKeyWidth}
                     borderThickness = {blackKeyBorderThickness}
                     left = {currentWidth - halfBlackWidth}
+                    noteSound = {currentNoteSound}
                 />
             );
         }
