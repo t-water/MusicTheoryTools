@@ -146,4 +146,4 @@ const ASharp: Note = {
 }
 
 export const NotesObj = { C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B };
-export const NotesArr: Note[] = Object.entries(NotesObj).map(([propName, Note]) => Note);
+export const NotesArr: Note[] = Object.entries(NotesObj).map(([propName, Note]: [string, Note]) => Note);

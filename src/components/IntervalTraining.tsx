@@ -37,7 +37,7 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
         }
     }
 
-    const intervalButtons: JSX.Element[] = Object.entries(intervalObj).map(([propName, interval]) => {
+    const intervalButtons: JSX.Element[] = Object.entries(intervalObj).map(([propName, interval]: [string, Interval]) => {
         if ((selectedIntervals as any)[propName]) {
             const intervalButtonStyle: React.CSSProperties = incorrectGuesses.has(interval) ? {backgroundColor: 'red', color: 'white'} : {};
 
@@ -74,7 +74,7 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
     let intervalSelectors: JSX.Element[] = [];
 
     if (panelIsOpen) {
-        intervalSelectors = Object.entries(intervalObj).map(([propName, interval]) => {
+        intervalSelectors = Object.entries(intervalObj).map(([propName, interval]: [string, Interval]) => {
             return (
                 <Toggle
                     label = {interval.name}

@@ -102,11 +102,12 @@ const Piano = (props: IPianoProps) => {
         return noteSoundObject.DistanceFromAZero;
     }
 
+    const keys: JSX.Element[] = [];
+
     const whiteKeyWidth: number = 40;
     const whiteKeyBorderThickness: number = 1;
     const whiteKeyWidthWithBorder: number = whiteKeyWidth + whiteKeyBorderThickness * 2;
-    const keys: JSX.Element[] = [];
-
+    
     const blackKeyWidth: number = 25;
     const blackKeyBorderThickness: number = 1;
     const blackKeyWidthWithBorder: number = blackKeyWidth + blackKeyBorderThickness * 2;

@@ -2,13 +2,9 @@ import { Interval, intervalObj } from "./Interval";
 
 const {MajorThird, MinorThird} = intervalObj;
 
-interface Chords {
-  Major: Interval[];
-  Minor: Interval[];
-  MajorSeventh: Interval[];
-  MinorSeventh: Interval[];
-  DominantSeventh: Interval[];
-}
+type ChordShapeName = 'Major' | 'Minor' | 'MajorSeventh' | 'MinorSeventh' | 'DominantSeventh';
+
+type Chords = Record<ChordShapeName, Interval[]>;
 
 const MajorChordIntervals: Interval[] = [MajorThird, MinorThird];
 const MajorSeventhChordIntervals: Interval[] = [MajorThird, MinorThird, MajorThird];
@@ -23,3 +19,5 @@ export const ChordsObj: Chords = {
   MinorSeventh: MinorSeventhChordIntervals,
   DominantSeventh: DominantSeventhChordIntervals
 }
+
+export const ChordsArr: Interval[][] = Object.entries(ChordsObj).map(([propName, chord]: [string, Interval[]]) => chord);

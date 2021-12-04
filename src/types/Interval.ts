@@ -60,7 +60,7 @@ export const intervalObj: IIntervals = {
     Octave
 }
 
-export const intervalArr: Interval[] = Object.entries(intervalObj).map(([propName, interval]) => interval);
+export const intervalArr: Interval[] = Object.entries(intervalObj).map(([propName, interval]: [string, Interval]) => interval);
 
 export interface IIntervalBooleans extends IGenericIntervals<boolean> {};
 

@@ -95,7 +95,7 @@ export const noteSounds: INoteSounds = {
 }
 
 export const noteSoundsArr: INoteSound[] = Object.entries(noteSounds)
-                                                 .map(([propName, noteSound]) => noteSound)
+                                                 .map(([propName, noteSound]: [string, INoteSound]) => noteSound)
 
 const distancesFromAZero: number[] = Object.getOwnPropertyNames(noteSounds).map((propName: string) => parseInt(propName));
 
