@@ -1,4 +1,6 @@
 import React from 'react';
+import useGetRandomChord from '../hooks/useGetRandomChord';
+import { Note } from '../types/Note';
 import { noteSounds, noteSoundsArr, NoteSoundsName } from '../types/NoteSounds';
 import { INoteSound } from '../types/NoteSounds';
 import './Piano.css';
@@ -48,8 +50,9 @@ interface IBaseKeyProps {
     keyWidth: number;
     borderThickness: number;
     left: number;
-    key: number;
+    key: React.Key;
     noteSound: INoteSound;
+    selected: boolean;
 }
 
 interface IWhiteKeyProps extends IBaseKeyProps{
@@ -65,7 +68,7 @@ const WhiteKey = (props: IWhiteKeyProps) => {
         left: `${props.left}px`
     }
 
-    return <Key className = 'white-key' noteSound = {props.noteSound} style = {whiteKeyStyle} key = {props.key}/>
+    return <Key className = {`white-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {whiteKeyStyle} key = {props.key}/>
 }
 
 interface IBlackKeyProps extends IBaseKeyProps{
@@ -73,7 +76,6 @@ interface IBlackKeyProps extends IBaseKeyProps{
 
 const BlackKey = (props: IBlackKeyProps) => {
     const blackKeyStyle: React.CSSProperties = {
-        backgroundColor: 'black',
         border: `${props.borderThickness}px solid black`,
         height: '150px',
         width: `${props.keyWidth}px`,
@@ -81,7 +83,7 @@ const BlackKey = (props: IBlackKeyProps) => {
         zIndex: 1
     }
 
-    return <Key className = 'black-key' noteSound = {props.noteSound} style = {blackKeyStyle} key = {props.key}/>
+    return <Key className = {`black-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {blackKeyStyle} key = {props.key}/>
 }
 
 interface IPianoProps {
@@ -89,7 +91,17 @@ interface IPianoProps {
     endingNoteSound: NoteSoundsName;
 }
 
+const selectedNotes: Set<Note> = new Set();
+
 const Piano = (props: IPianoProps) => { 
+    const getRandomChord = useGetRandomChord();
+    const randomChordNotes: Note[] = getRandomChord().Notes;
+
+    selectedNotes.clear();
+    randomChordNotes.forEach((note: Note) => selectedNotes.add(note));
+
+    console.log('RANDOM CHORD NOTES: ', randomChordNotes);
+
     const getNoteSoundDistanceFromAZero = (noteSound: NoteSoundsName): number => {
         let noteSoundObject: INoteSound;
 
@@ -129,6 +141,7 @@ const Piano = (props: IPianoProps) => {
                     borderThickness = {whiteKeyBorderThickness} 
                     left = {currentWidth} 
                     noteSound = {currentNoteSound}
+                    selected = {selectedNotes.has(currentNoteSound.Note)}
                 />
             );
 
@@ -141,6 +154,7 @@ const Piano = (props: IPianoProps) => {
                     borderThickness = {blackKeyBorderThickness}
                     left = {currentWidth - halfBlackWidth}
                     noteSound = {currentNoteSound}
+                    selected = {selectedNotes.has(currentNoteSound.Note)}
                 />
             );
         }

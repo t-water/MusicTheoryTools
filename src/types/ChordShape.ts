@@ -1,8 +1,10 @@
+import { getRandomArrayElement } from "./HelperFunctions";
 import { Interval, intervalObj } from "./Interval";
 
 const {MajorThird, MinorThird} = intervalObj;
 
-type ChordShapeName = 'Major' | 'Minor' | 'MajorSeventh' | 'MinorSeventh' | 'DominantSeventh';
+export const ChordShapeNames: string[] = ['Major', 'Minor', 'MajorSeventh', 'MinorSeventh', 'DominantSeventh'];
+export type ChordShapeName = typeof ChordShapeNames[number];
 
 type ChordShapes = Record<ChordShapeName, Interval[]>;
 
@@ -21,3 +23,7 @@ export const ChordShapesObj: ChordShapes = {
 }
 
 export const ChordShapesArr: Interval[][] = Object.entries(ChordShapesObj).map(([propName, chordShape]: [string, Interval[]]) => chordShape);
+
+export const getRandomChordShapeName = () => {
+  return getRandomArrayElement(ChordShapeNames);
+}
