@@ -4,7 +4,7 @@ const {MajorThird, MinorThird} = intervalObj;
 
 type ChordShapeName = 'Major' | 'Minor' | 'MajorSeventh' | 'MinorSeventh' | 'DominantSeventh';
 
-type Chords = Record<ChordShapeName, Interval[]>;
+type ChordShapes = Record<ChordShapeName, Interval[]>;
 
 const MajorChordIntervals: Interval[] = [MajorThird, MinorThird];
 const MajorSeventhChordIntervals: Interval[] = [MajorThird, MinorThird, MajorThird];
@@ -12,7 +12,7 @@ const MinorChordIntervals: Interval[] = [MinorThird, MajorThird];
 const MinorSeventhChordIntervals: Interval[] = [MinorThird, MajorThird, MinorThird];
 const DominantSeventhChordIntervals: Interval[] = [MajorThird, MinorThird, MinorThird];
 
-export const ChordsObj: Chords = {
+export const ChordShapesObj: ChordShapes = {
   Major: MajorChordIntervals,
   Minor: MinorChordIntervals,
   MajorSeventh: MajorSeventhChordIntervals,
@@ -20,4 +20,4 @@ export const ChordsObj: Chords = {
   DominantSeventh: DominantSeventhChordIntervals
 }
 
-export const ChordsArr: Interval[][] = Object.entries(ChordsObj).map(([propName, chord]: [string, Interval[]]) => chord);
+export const ChordShapesArr: Interval[][] = Object.entries(ChordShapesObj).map(([propName, chordShape]: [string, Interval[]]) => chordShape);

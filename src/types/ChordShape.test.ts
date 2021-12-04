@@ -1,9 +1,9 @@
 import { useGetNoteSequence } from "../hooks/useGetNoteSequence"
 import { Note, NotesObj } from "./Note";
-import { ChordsObj } from "./Chord";
+import { ChordShapesObj } from "./ChordShape";
 
 const {C, E, G, A, B, D, F} = NotesObj;
-const {Major, Minor, MajorSeventh, MinorSeventh, DominantSeventh} = ChordsObj;
+const {Major, Minor, MajorSeventh, MinorSeventh, DominantSeventh} = ChordShapesObj;
 
 test('Returns Correct Notes of C Major', () => {
     const getChordNotes = useGetNoteSequence();
