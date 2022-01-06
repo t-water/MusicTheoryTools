@@ -7,7 +7,6 @@ import './Piano.css';
 
 interface IKeyProps {
     className: string;
-    key: React.Key;
     noteSound: INoteSound;
     style: React.CSSProperties;
 }
@@ -37,7 +36,6 @@ const Key = (props: IKeyProps) => {
     return (
         <div 
             className = {props.className}
-            key = {props.key} 
             style = {{...keyStyle, ...props.style}} 
             onMouseDown = {onMouseDown} 
             onMouseEnter = {onMouseEnter}
@@ -68,7 +66,7 @@ const WhiteKey = (props: IWhiteKeyProps) => {
         left: `${props.left}px`
     }
 
-    return <Key className = {`white-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {whiteKeyStyle} key = {props.key}/>
+    return <Key className = {`white-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {whiteKeyStyle}/>
 }
 
 interface IBlackKeyProps extends IBaseKeyProps{
@@ -83,7 +81,7 @@ const BlackKey = (props: IBlackKeyProps) => {
         zIndex: 1
     }
 
-    return <Key className = {`black-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {blackKeyStyle} key = {props.key}/>
+    return <Key className = {`black-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {blackKeyStyle} />
 }
 
 interface IPianoProps {
@@ -98,9 +96,7 @@ const Piano = (props: IPianoProps) => {
     const randomChordNotes: Note[] = getRandomChord().Notes;
 
     selectedNotes.clear();
-    randomChordNotes.forEach((note: Note) => selectedNotes.add(note));
-
-    console.log('RANDOM CHORD NOTES: ', randomChordNotes);
+    randomChordNotes.forEach((note: Note) => {selectedNotes.add(note); console.log('NOTE ADDED: ', note)});
 
     const getNoteSoundDistanceFromAZero = (noteSound: NoteSoundsName): number => {
         let noteSoundObject: INoteSound;
@@ -132,29 +128,38 @@ const Piano = (props: IPianoProps) => {
 
     for (let i=startingKeyDistanceFromAZero; i<=endingKeyDistanceFromAZero; i++) {
         const currentNoteSound: INoteSound = noteSoundsArr.filter((sound: INoteSound) => sound.DistanceFromAZero === i)[0];
+        const noteIsSelected: boolean = selectedNotes.has(currentNoteSound.Note);
 
         if (!currentNoteSound.Note.IsAccidental) {
+            const whiteKeyProps = {
+                key: i, 
+                keyWidth: whiteKeyWidth, 
+                borderThickness: whiteKeyBorderThickness, 
+                left: currentWidth, 
+                noteSound: currentNoteSound,
+                selected: noteIsSelected
+            }
+
             keys.push(
                 <WhiteKey 
-                    key = {i} 
-                    keyWidth = {whiteKeyWidth} 
-                    borderThickness = {whiteKeyBorderThickness} 
-                    left = {currentWidth} 
-                    noteSound = {currentNoteSound}
-                    selected = {selectedNotes.has(currentNoteSound.Note)}
+                    {...whiteKeyProps}
                 />
             );
 
             currentWidth += whiteKeyWidthWithBorder;
         } else {
+            const blackKeyProps = {
+                key: i,
+                keyWidth: blackKeyWidth,
+                borderThickness: blackKeyBorderThickness,
+                left: currentWidth - halfBlackWidth,
+                noteSound: currentNoteSound,
+                selected: noteIsSelected
+            }
+
             keys.push(
                 <BlackKey
-                    key = {i}
-                    keyWidth = {blackKeyWidth}
-                    borderThickness = {blackKeyBorderThickness}
-                    left = {currentWidth - halfBlackWidth}
-                    noteSound = {currentNoteSound}
-                    selected = {selectedNotes.has(currentNoteSound.Note)}
+                    {...blackKeyProps}
                 />
             );
         }

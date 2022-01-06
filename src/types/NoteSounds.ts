@@ -97,7 +97,7 @@ export const noteSounds: INoteSounds = {
 export const noteSoundsArr: INoteSound[] = Object.entries(noteSounds)
                                                  .map(([propName, noteSound]: [string, INoteSound]) => noteSound)
 
-const distancesFromAZero: number[] = Object.getOwnPropertyNames(noteSounds).map((propName: string) => parseInt(propName));
+const distancesFromAZero: number[] = noteSoundsArr.map((noteSound: INoteSound) => noteSound.DistanceFromAZero);
 
 export const MIN_DISTANCE_FROM_A_ZERO: number = Math.min(...distancesFromAZero);
 export const MAX_DISTANCE_FROM_A_ZERO: number = Math.max(...distancesFromAZero);
