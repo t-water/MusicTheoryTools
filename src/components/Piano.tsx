@@ -1,102 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useGetRandomChord from '../hooks/useGetRandomChord';
 import { Note } from '../types/Note';
 import { noteSounds, noteSoundsArr, NoteSoundsName } from '../types/NoteSounds';
 import { INoteSound } from '../types/NoteSounds';
+import { BlackKey, WhiteKey } from './Key';
 import './Piano.css';
-
-interface IKeyProps {
-    className: string;
-    noteSound: INoteSound;
-    style: React.CSSProperties;
-}
-
-const Key = (props: IKeyProps) => {
-    const keyStyle: React.CSSProperties = {
-        borderRadius: '0 0 3% 3%',
-        position: 'absolute'
-    }
-
-    const playNote = () => {
-        props.noteSound.Audio.pause();
-        props.noteSound.Audio.currentTime = 0;
-        props.noteSound.Audio.play();
-    }
-
-    const onMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.buttons === 1) {
-            playNote();
-        }
-    };
-
-    const onMouseDown = () => {
-        playNote();
-    }
-
-    return (
-        <div 
-            className = {props.className}
-            style = {{...keyStyle, ...props.style}} 
-            onMouseDown = {onMouseDown} 
-            onMouseEnter = {onMouseEnter}
-        >
-        </div> 
-    )
-}
-
-interface IBaseKeyProps {
-    keyWidth: number;
-    borderThickness: number;
-    left: number;
-    key: React.Key;
-    noteSound: INoteSound;
-    selected: boolean;
-}
-
-interface IWhiteKeyProps extends IBaseKeyProps{
-}
-
-const WhiteKey = (props: IWhiteKeyProps) => {
-    const whiteKeyWidthHeightRatio: number = 5.626;
-
-    const whiteKeyStyle: React.CSSProperties = {
-        border: `${props.borderThickness}px solid black`,
-        height: `${props.keyWidth * whiteKeyWidthHeightRatio}px`,
-        width: `${props.keyWidth}px`,
-        left: `${props.left}px`
-    }
-
-    return <Key className = {`white-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {whiteKeyStyle}/>
-}
-
-interface IBlackKeyProps extends IBaseKeyProps{
-}
-
-const BlackKey = (props: IBlackKeyProps) => {
-    const blackKeyStyle: React.CSSProperties = {
-        border: `${props.borderThickness}px solid black`,
-        height: '150px',
-        width: `${props.keyWidth}px`,
-        left: `${props.left}px`,
-        zIndex: 1
-    }
-
-    return <Key className = {`black-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {blackKeyStyle} />
-}
 
 interface IPianoProps {
     startingNoteSound: NoteSoundsName;
     endingNoteSound: NoteSoundsName;
 }
 
-const selectedNotes: Set<Note> = new Set();
-
 const Piano = (props: IPianoProps) => { 
     const getRandomChord = useGetRandomChord();
-    const randomChordNotes: Note[] = getRandomChord().Notes;
 
-    selectedNotes.clear();
-    randomChordNotes.forEach((note: Note) => {selectedNotes.add(note); console.log('NOTE ADDED: ', note)});
+    const randomChordDistancesFromC: number[] = getRandomChord().Notes.map((note: Note) => {
+        console.log('RANDOM CHORD NOTES: ', note);
+        return note.DistanceFromC;
+    });
+
+    const [randomChordNotes, setRandomChordNotes] = useState<number[]>(randomChordDistancesFromC);
 
     const getNoteSoundDistanceFromAZero = (noteSound: NoteSoundsName): number => {
         let noteSoundObject: INoteSound;
@@ -110,8 +33,6 @@ const Piano = (props: IPianoProps) => {
         return noteSoundObject.DistanceFromAZero;
     }
 
-    const keys: JSX.Element[] = [];
-
     const whiteKeyWidth: number = 40;
     const whiteKeyBorderThickness: number = 1;
     const whiteKeyWidthWithBorder: number = whiteKeyWidth + whiteKeyBorderThickness * 2;
@@ -124,46 +45,52 @@ const Piano = (props: IPianoProps) => {
     const startingKeyDistanceFromAZero: number = getNoteSoundDistanceFromAZero(props.startingNoteSound);
     const endingKeyDistanceFromAZero: number = getNoteSoundDistanceFromAZero(props.endingNoteSound);
 
+    const noteSoundsInUse: INoteSound[] = noteSoundsArr.filter((sound: INoteSound) => sound.DistanceFromAZero >= startingKeyDistanceFromAZero && sound.DistanceFromAZero <= endingKeyDistanceFromAZero);
     let currentWidth: number = 0;
 
-    for (let i=startingKeyDistanceFromAZero; i<=endingKeyDistanceFromAZero; i++) {
-        const currentNoteSound: INoteSound = noteSoundsArr.filter((sound: INoteSound) => sound.DistanceFromAZero === i)[0];
-        const noteIsSelected: boolean = selectedNotes.has(currentNoteSound.Note);
+    const keys: JSX.Element[] = noteSoundsInUse.map((sound: INoteSound, i: number) => {
+        const noteIsSelected: boolean = randomChordNotes.includes(sound.Note.DistanceFromC);
 
-        if (!currentNoteSound.Note.IsAccidental) {
+        console.log('NOTE SOUND: ', sound, noteIsSelected);
+
+        if (!sound.Note.IsAccidental) {
             const whiteKeyProps = {
                 key: i, 
                 keyWidth: whiteKeyWidth, 
                 borderThickness: whiteKeyBorderThickness, 
                 left: currentWidth, 
-                noteSound: currentNoteSound,
+                noteSound: sound,
                 selected: noteIsSelected
             }
 
-            keys.push(
+            currentWidth += whiteKeyWidthWithBorder;
+
+            console.log('KEY PROPS: ', whiteKeyProps);
+
+            return (
                 <WhiteKey 
                     {...whiteKeyProps}
                 />
             );
-
-            currentWidth += whiteKeyWidthWithBorder;
         } else {
             const blackKeyProps = {
                 key: i,
                 keyWidth: blackKeyWidth,
                 borderThickness: blackKeyBorderThickness,
                 left: currentWidth - halfBlackWidth,
-                noteSound: currentNoteSound,
+                noteSound: sound,
                 selected: noteIsSelected
             }
 
-            keys.push(
+            console.log('KEY PROPS: ', blackKeyProps)
+
+            return (
                 <BlackKey
                     {...blackKeyProps}
                 />
             );
         }
-    }
+    });
 
     return (
         <div style = {{margin: '5px 10px', position: 'relative'}}>
