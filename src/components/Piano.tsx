@@ -14,17 +14,19 @@ interface IPianoProps {
 const Piano = (props: IPianoProps) => { 
     const getRandomChord = useGetRandomChord();
 
+    const [randomChordNotes, setRandomChordNotes] = useState<number[]>([]);
+
     const getRandomChordNotes = () => {
-        return getRandomChord().Notes.map((note: Note) => {
+        const notes = getRandomChord().Notes.map((note: Note) => {
             return note.DistanceFromC;
         });
+
+        setRandomChordNotes(notes);
     }
 
-    const [randomChordNotes, setRandomChordNotes] = useState<number[]>(getRandomChordNotes);
-
-    useEffect(() => {
-        console.log('EFFECT CHORD NOTES', randomChordNotes);
-    }, [randomChordNotes]);
+    // useEffect(() => {
+    //     console.log('EFFECT CHORD NOTES', randomChordNotes);
+    // }, [randomChordNotes]);
 
     const getNoteSoundDistanceFromAZero = (noteSound: NoteSoundsName): number => {
         let noteSoundObject: INoteSound;
@@ -54,9 +56,9 @@ const Piano = (props: IPianoProps) => {
     let currentWidth: number = 0;
 
     const keys: JSX.Element[] = noteSoundsInUse.map((sound: INoteSound, i: number) => {
-        const noteIsSelected: boolean = randomChordNotes.includes(sound.Note.DistanceFromC);
+        // const noteIsSelected: boolean = randomChordNotes.includes(sound.Note.DistanceFromC);
 
-        console.log('RANDOM CHORD NOTES In Loop', randomChordNotes);
+        console.log('LOOP RANDOM CHORD NOTES: ', randomChordNotes);
 
         if (!sound.Note.IsAccidental) {
             const whiteKey: JSX.Element = (
@@ -66,7 +68,7 @@ const Piano = (props: IPianoProps) => {
                     borderThickness = {whiteKeyBorderThickness}
                     left = {currentWidth}
                     noteSound = {sound}                    
-                    selected = {noteIsSelected}
+                    // selected = {noteIsSelected}
                     selectedNotes={[...randomChordNotes]}
                 />
             )
@@ -84,7 +86,7 @@ const Piano = (props: IPianoProps) => {
                     borderThickness = {blackKeyBorderThickness}
                     left = {currentWidth - halfBlackWidth}
                     noteSound = {sound}
-                    selected = {noteIsSelected}
+                    // selected = {noteIsSelected}
                     selectedNotes={[...randomChordNotes]}
                 />
             );
@@ -92,8 +94,13 @@ const Piano = (props: IPianoProps) => {
     });
 
     return (
-        <div style = {{margin: '5px 10px', position: 'relative'}}>
-            {keys}
+        <div>
+            <div>
+                <button onClick={getRandomChordNotes}>Get Random Chord</button>
+            </div>
+            <div style = {{margin: '5px 10px', position: 'relative'}}>
+                {keys}
+            </div>
         </div>
     )
 }

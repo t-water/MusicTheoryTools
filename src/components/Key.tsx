@@ -45,7 +45,7 @@ interface IBaseKeyProps {
     left: number;
     key: React.Key;
     noteSound: INoteSound;
-    selected: boolean;
+    // selected: boolean;
     selectedNotes: number[];
 }
 
@@ -53,6 +53,8 @@ interface IWhiteKeyProps extends IBaseKeyProps{
 }
 
 export const WhiteKey = (props: IWhiteKeyProps) => {
+    const selected: boolean = props.selectedNotes.includes(props.noteSound.Note.DistanceFromC);
+
     console.log('SELECTED NOTES', props.noteSound, props.selectedNotes);
     const whiteKeyWidthHeightRatio: number = 5.626;
 
@@ -63,13 +65,15 @@ export const WhiteKey = (props: IWhiteKeyProps) => {
         left: `${props.left}px`
     }
 
-    return <Key className = {`white-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {whiteKeyStyle}/>
+    return <Key className = {`white-key ${selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {whiteKeyStyle}/>
 }
 
 interface IBlackKeyProps extends IBaseKeyProps{
 }
 
 export const BlackKey = (props: IBlackKeyProps) => {
+    const selected: boolean = props.selectedNotes.includes(props.noteSound.Note.DistanceFromC);
+
     console.log('SELECTED NOTES', props.noteSound, props.selectedNotes);
     const blackKeyStyle: React.CSSProperties = {
         border: `${props.borderThickness}px solid black`,
@@ -79,5 +83,5 @@ export const BlackKey = (props: IBlackKeyProps) => {
         zIndex: 1
     }
 
-    return <Key className = {`black-key ${props.selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {blackKeyStyle} />
+    return <Key className = {`black-key ${selected ? 'selected' : ''}`} noteSound = {props.noteSound} style = {blackKeyStyle} />
 }

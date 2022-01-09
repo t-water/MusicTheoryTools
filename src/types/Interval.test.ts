@@ -1,4 +1,4 @@
-import useGetIntervalNote from "../hooks/useGetIntervalNote";
+import { getAscending, getDescending } from "./GetIntervalNote";
 import { intervalObj } from "./Interval";
 import { NotesObj } from "./Note";
 
@@ -6,8 +6,6 @@ const {C, CSharp, D, A, B, E, F, G, ASharp, DSharp, FSharp, GSharp} = NotesObj;
 const {MinorSecond, MajorSecond, MinorThird, MajorThird, PerfectFourth, Tritone, PerfectFifth, MinorSixth, MajorSixth, MinorSeventh, MajorSeventh, Octave} = intervalObj;
 
 test('Returns Correct Ascending Intervals of C', () => {
-    const {getAscending} = useGetIntervalNote();
-
     expect(getAscending(C, MinorSecond).DistanceFromC).toBe(CSharp.DistanceFromC);
     expect(getAscending(C, MajorSecond).DistanceFromC).toBe(D.DistanceFromC);
     expect(getAscending(C, MinorThird).DistanceFromC).toBe(DSharp.DistanceFromC);
@@ -23,8 +21,6 @@ test('Returns Correct Ascending Intervals of C', () => {
 })
 
 test('Returns Correct Descending Intervals of C', () => {
-    const {getDescending} = useGetIntervalNote();
-
     expect(getDescending(C, MinorSecond).DistanceFromC).toBe(B.DistanceFromC);
     expect(getDescending(C, MajorSecond).DistanceFromC).toBe(ASharp.DistanceFromC);
     expect(getDescending(C, MinorThird).DistanceFromC).toBe(A.DistanceFromC);
