@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useGetRandomChord from '../hooks/useGetRandomChord';
 import { Note } from '../types/Note';
 import { noteSounds, noteSoundsArr, NoteSoundsName } from '../types/NoteSounds';
@@ -14,12 +14,17 @@ interface IPianoProps {
 const Piano = (props: IPianoProps) => { 
     const getRandomChord = useGetRandomChord();
 
-    const randomChordDistancesFromC: number[] = getRandomChord().Notes.map((note: Note) => {
-        console.log('RANDOM CHORD NOTES: ', note);
-        return note.DistanceFromC;
-    });
+    const getRandomChordNotes = () => {
+        return getRandomChord().Notes.map((note: Note) => {
+            return note.DistanceFromC;
+        });
+    }
 
-    const [randomChordNotes, setRandomChordNotes] = useState<number[]>(randomChordDistancesFromC);
+    const [randomChordNotes, setRandomChordNotes] = useState<number[]>(getRandomChordNotes);
+
+    useEffect(() => {
+        console.log('EFFECT CHORD NOTES', randomChordNotes);
+    }, [randomChordNotes]);
 
     const getNoteSoundDistanceFromAZero = (noteSound: NoteSoundsName): number => {
         let noteSoundObject: INoteSound;
@@ -51,42 +56,36 @@ const Piano = (props: IPianoProps) => {
     const keys: JSX.Element[] = noteSoundsInUse.map((sound: INoteSound, i: number) => {
         const noteIsSelected: boolean = randomChordNotes.includes(sound.Note.DistanceFromC);
 
-        console.log('NOTE SOUND: ', sound, noteIsSelected);
+        console.log('RANDOM CHORD NOTES In Loop', randomChordNotes);
 
         if (!sound.Note.IsAccidental) {
-            const whiteKeyProps = {
-                key: i, 
-                keyWidth: whiteKeyWidth, 
-                borderThickness: whiteKeyBorderThickness, 
-                left: currentWidth, 
-                noteSound: sound,
-                selected: noteIsSelected
-            }
+            const whiteKey: JSX.Element = (
+                <WhiteKey 
+                    key = {i}
+                    keyWidth = {whiteKeyWidth}
+                    borderThickness = {whiteKeyBorderThickness}
+                    left = {currentWidth}
+                    noteSound = {sound}                    
+                    selected = {noteIsSelected}
+                    selectedNotes={[...randomChordNotes]}
+                />
+            )
 
             currentWidth += whiteKeyWidthWithBorder;
 
-            console.log('KEY PROPS: ', whiteKeyProps);
-
             return (
-                <WhiteKey 
-                    {...whiteKeyProps}
-                />
+                whiteKey
             );
         } else {
-            const blackKeyProps = {
-                key: i,
-                keyWidth: blackKeyWidth,
-                borderThickness: blackKeyBorderThickness,
-                left: currentWidth - halfBlackWidth,
-                noteSound: sound,
-                selected: noteIsSelected
-            }
-
-            console.log('KEY PROPS: ', blackKeyProps)
-
             return (
                 <BlackKey
-                    {...blackKeyProps}
+                    key = {i}
+                    keyWidth = {blackKeyWidth}
+                    borderThickness = {blackKeyBorderThickness}
+                    left = {currentWidth - halfBlackWidth}
+                    noteSound = {sound}
+                    selected = {noteIsSelected}
+                    selectedNotes={[...randomChordNotes]}
                 />
             );
         }

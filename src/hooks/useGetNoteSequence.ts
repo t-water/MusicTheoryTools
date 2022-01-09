@@ -1,11 +1,10 @@
+import { useCallback } from "react";
 import { Interval } from "../types/Interval";
 import { Note } from "../types/Note";
-import useGetIntervalNote from "./useGetIntervalNote";
+import { getAscending } from "../types/GetIntervalNote";
 
 export const useGetNoteSequence = () => {
-    const {getAscending} = useGetIntervalNote();
-
-    return (startingNote: Note, scaleIntervals: Interval[]): Note[] => {
+    return useCallback((startingNote: Note, scaleIntervals: Interval[]): Note[] => {
         let notes = [startingNote];
 
         scaleIntervals.forEach((interval: Interval, i: number) => {
@@ -13,5 +12,5 @@ export const useGetNoteSequence = () => {
         })
 
         return notes;
-    };
+    }, []);
 }

@@ -1,7 +1,7 @@
 import { CommandBar, DefaultButton, ICommandBarItemProps, Panel, PrimaryButton, Stack, Toggle } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import React, { useState } from 'react';
-import useGetIntervalNote from '../hooks/useGetIntervalNote';
+import { getAscending } from '../types/GetIntervalNote';
 import useGetRandomNote from '../hooks/useGetRandomNote';
 import useScoring from '../hooks/useScoring';
 import { getSettingsCommandBarItem } from '../types/CommonElements';
@@ -20,7 +20,6 @@ const IntervalTraining = (props: IIntervalTrainingProps) => {
     const [endingNote, setEndingNote] = useState<Note>(getRandomNote());
     const [panelIsOpen, {setFalse: closePanel, setTrue: openPanel}] = useBoolean(false);
     const [selectedIntervals, setSelectedIntervals] = useState<IIntervalBooleans>({...intervalBooleansTrue});
-    const { getAscending } = useGetIntervalNote();
     const { incrementCorrect, incrementIncorrect, scorePrintOut, percentPrintOut, resetScore } = useScoring();
 
     const onClickIntervalButton = (e: React.MouseEvent<HTMLButtonElement>, interval: Interval) => {

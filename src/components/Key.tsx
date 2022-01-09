@@ -46,14 +46,14 @@ interface IBaseKeyProps {
     key: React.Key;
     noteSound: INoteSound;
     selected: boolean;
+    selectedNotes: number[];
 }
 
 interface IWhiteKeyProps extends IBaseKeyProps{
 }
 
 export const WhiteKey = (props: IWhiteKeyProps) => {
-    console.log('WHITE KEY PROPS: ', props);
-
+    console.log('SELECTED NOTES', props.noteSound, props.selectedNotes);
     const whiteKeyWidthHeightRatio: number = 5.626;
 
     const whiteKeyStyle: React.CSSProperties = {
@@ -70,6 +70,7 @@ interface IBlackKeyProps extends IBaseKeyProps{
 }
 
 export const BlackKey = (props: IBlackKeyProps) => {
+    console.log('SELECTED NOTES', props.noteSound, props.selectedNotes);
     const blackKeyStyle: React.CSSProperties = {
         border: `${props.borderThickness}px solid black`,
         height: '150px',
